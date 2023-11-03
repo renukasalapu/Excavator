@@ -1,0 +1,35 @@
+<h1>
+Ticket details
+</h1>
+<p> <strong>Request Number : </strong> <%= @ticket.request_number %> </p>
+<p> <strong> Sequence Number : </strong> <%= @ticket.sequence_number %> </p>
+<p> <strong>Request Type : </strong> <%= @ticket.request_type %> </p>
+<p> <strong>Request Action : </strong> <%= @ticket.request_action %> </p>
+<p> <strong> Response Due Date Time : </strong> <%= @ticket.response_due_date_time %> </p>
+<p> <strong> Prime Service Area Code </strong> <%= @ticket.primary_service_area_code %> </p>
+<p> <strong> Additional Service Area Codes: </strong> <%= @ticket.additional_service_area_codes %> </p>
+<h1>Excavation details</h1>
+<% @excavator = @ticket.excavator %>
+<p> <strong> Company Name : </strong> <%= @excavator.company_name %> </p>
+<p> <strong> Address : </strong> <%= @excavator.address %> </p>
+<p> <strong>Crew On Site : </strong> <%= @excavator.crew_on_site %> </p>
+
+<div id="map" style="height: 400px;"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var map = L.map("map").setView([0, 0], 2); 
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(map);
+
+    var wellKnownText = "<%= @ticket.well_known_text %>";
+
+    // Parse the Well-Known Text and create a marker on the map.
+    var wellKnownTextLayer = omnivore.wkt.parse(wellKnownText).addTo(map);
+
+    // Fit the map to the extent of the Well-Known Text feature.
+    map.fitBounds(wellKnownTextLayer.getBounds());
+  });
+</script>
